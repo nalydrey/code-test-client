@@ -1,16 +1,26 @@
+import { ReactNode } from "react"
 import { Avatar } from "./avatar.component"
 import ava from '../assets/avatars/avatar_10.png'
 import moment from 'moment'
 import 'moment/locale/ru'
 import { ControlButton } from "./control-button.component"
 import { Counter } from "./counter.component"
-import { SourceSection } from "./source-section.comonent"
-import { ContentSection } from "./content-section.component"
+import { TrashIcon } from "@heroicons/react/16/solid"
+import { MouseEvent } from "react"
 
 
+interface MessageCardProps {
+    userName: string,
+    children: JSX.Element | JSX.Element[] | ReactNode | ReactNode[]
+    onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
+}
 
 
-export const MessageCard = () => {
+export const MessageCard = ({
+    userName,
+    children,
+    onDelete
+}: MessageCardProps) => {
 
    
    
@@ -27,9 +37,9 @@ export const MessageCard = () => {
                     <Avatar
                         src={ava}
                     />
-                    <span className="font-bold text-xl">Name</span>
+                    <span className="font-bold text-xl">{userName}</span>
                     <div>{moment().add('days').calendar()}</div>
-                    <div>
+                    <div className="flex">
                         <ControlButton
                             icon = {1}
                         />
@@ -40,15 +50,16 @@ export const MessageCard = () => {
                             icon = {3}
                         />
                         <ControlButton
-                            icon = {4}
+                            onClick={onDelete}
+                            className="hover:text-red-500"
+                            icon = {<TrashIcon/>}
                         />
                     </div>
                 </div>
                 <Counter/>
             </header>
-            <div className="py-2 px-4">
-                <ContentSection/>
-                <SourceSection/>
+            <div className="py-2 pl-5 pr-1">
+              {children}
             </div>
         </div>
     )
