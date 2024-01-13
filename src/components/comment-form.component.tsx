@@ -6,18 +6,28 @@ import { XMarkIcon } from '@heroicons/react/16/solid'
 import { MouseEvent } from 'react'
 import {useFormik} from 'formik'
 import {object, string} from 'yup'
+import ReCAPTCHA from 'react-google-recaptcha'
+ 
+
 
 const initialValues = {
     userName: '',
     email: '',
+    captcha: '',
     homePage: '',
     text: ''
 }
 
-const validationSchema = object<typeof initialValues>({
+type CommentForm = typeof initialValues
+
+const urlRegEx = new RegExp('(?:(?:ht|f)tps?://)?(?:[\\-\\w]+:[\\-\\w]+@)?(?:[0-9a-z][\\-0-9a-z]*[0-9a-z]\\.)+[a-z]{2,6}(?::\\d{1,5})?(?:[?/\\\\#][?!^$.(){}:|=[\\]+\\-/\\\\*;&~#@,%\\wА-Яа-я]*)?')
+const emailRegEx = new RegExp('^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)(.[a-z]{2,6}$)')
+
+const validationSchema = object<CommentForm>({
     userName: string().required('Поле должно быть заполнено'),
-    email: string().required('Поле должно быть заполнено').email('Формат ввода должен быть типа email (name@gmail.com)'),
-    homePage: string(),
+    captcha: string().required(),
+    email: string().required('Поле должно быть заполнено').matches(emailRegEx, 'Формат ввода должен быть типа email (name@gmail.com)'),
+    homePage: string().matches(urlRegEx, {message: 'домашняя страница должна соотсетствовать паттерну url' }),
     text: string().required()
 })
 
@@ -26,21 +36,31 @@ const validationSchema = object<typeof initialValues>({
 
 interface CommentFormProps {
     onClose?: (e: MouseEvent<HTMLButtonElement>) => void
+    onFormSubmit?: (form: CommentForm ) => void
 }
 
 export const CommentForm = ({
-    onClose
+    onClose,
+    onFormSubmit
+
 }: CommentFormProps) => {
 
-    const { errors, touched,  values, handleSubmit, handleChange, handleBlur } = useFormik({
+    const { errors, touched,  values, handleSubmit, handleChange, handleBlur, setValues } = useFormik<CommentForm>({
         initialValues,
         validationSchema,
-        onSubmit: () => {
+        onSubmit: (form) => {
             console.log('submit');
-            
+            onFormSubmit && onFormSubmit(form)
         }
     })
 
+    console.log(errors);
+
+  
+    const handleRecaptchaChange = (value: string | null) => {
+        console.log(value);
+        setValues({...values, captcha: value ? value : ''})
+    }
     
 
     return (
@@ -86,6 +106,7 @@ export const CommentForm = ({
                         fullWidth
                         label = 'Домашняя страница'
                         value={values.homePage}
+                        helperText={touched.homePage && errors.homePage ? errors.homePage : ''}
                         onChange={handleChange}
                     />
                    <TextArea
@@ -97,6 +118,11 @@ export const CommentForm = ({
                         onChange={handleChange}
                         onBlur={handleBlur}
                    />
+                   <ReCAPTCHA
+                        className=' flex justify-center'
+                        sitekey="6LdLo08pAAAAACgJgkQLl2fKG6gTjN3VSETIKGuC"
+                        onChange={handleRecaptchaChange}
+                    />
                 </div>
                 <Button
                     type='button'
@@ -106,8 +132,6 @@ export const CommentForm = ({
                     type='submit'
                     title='Создать'
                 />
-               
-
             </form>
         </div>
     )

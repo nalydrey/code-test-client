@@ -1,9 +1,16 @@
-export const ContentSection = () => {
+
+interface ContentSectionProps {
+    text: string
+}
+
+export const ContentSection = ({
+    text
+}: ContentSectionProps) => {
     return (
         <div
             className="py-2"
         >
-            ContentSection
+            {text}
         </div>
     )
 }
