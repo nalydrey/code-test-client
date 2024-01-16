@@ -2,7 +2,7 @@ import { MessageCard } from "./components/message-card.component"
 import { Button } from "./components/button.component" 
 import { ContentSection } from "./components/content-section.component"
 import { useCreateNewCommentMutation, useDeleteCommentMutation, useGetCommentsQuery } from "./api/apiSlice"
-import { useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { Reply } from "./components/reply.component"
 import { ModalWindow } from "./components/modal-window.compnent"
 import { CommentForm } from "./components/comment-form.component"
@@ -11,6 +11,7 @@ import { NewCommentDto } from "./models/dto/new-comment.dto"
 function App() {
 
   const [openModal, setOpenModal] = useState<boolean>(false)
+
 
   const { data: comments, isSuccess: isGetCommentsSuccess } = useGetCommentsQuery('')
   const [deleteComment] = useDeleteCommentMutation()
@@ -38,6 +39,11 @@ function App() {
     isSuccessCreateNewComment && setOpenModal(false)
   }, [isSuccessCreateNewComment])
 
+
+  const a = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    e.target.setSelectionRange(10, 10)
+    
+  }
   return (
     <>
       <div className="container mx-auto">
