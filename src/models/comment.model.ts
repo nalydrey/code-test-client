@@ -1,8 +1,10 @@
+import { IFile } from "./file.model"
+import { IUser } from "./user.model"
+
 export interface Comment {
     id: number
-    userName: string
-    email: string
-    homePage: string
+    file: IFile | null
+    user: IUser
     text: string
     parent: Comment | null
     reply: Comment[]

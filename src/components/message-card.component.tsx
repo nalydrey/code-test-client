@@ -1,25 +1,31 @@
 import { ReactNode } from "react"
 import { Avatar } from "./avatar.component"
-import ava from '../assets/avatars/avatar_10.png'
 import moment from 'moment'
 import 'moment/locale/ru'
 import { ControlButton } from "./control-button.component"
-import { Counter } from "./counter.component"
 import { TrashIcon } from "@heroicons/react/16/solid"
 import { MouseEvent } from "react"
+import { PreviewFile } from "./preview-file.component"
+import { getExtantion } from "../functions/get-extention"
+import { IFile } from "../models/file.model"
 
 
 interface MessageCardProps {
+    file: IFile | null
+    avaSrc: string
     userName: string,
     children: JSX.Element | JSX.Element[] | ReactNode | ReactNode[]
     onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
+    onShow?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
-
 export const MessageCard = ({
+    file,
+    avaSrc,
     userName,
     children,
-    onDelete
+    onDelete,
+    onShow
 }: MessageCardProps) => {
 
    
@@ -35,11 +41,11 @@ export const MessageCard = ({
                     className="flex gap-4 items-center"
                 >
                     <Avatar
-                        src={ava}
+                        src={avaSrc}
                     />
                     <span className="font-bold text-xl">{userName}</span>
                     <div>{moment().add('days').calendar()}</div>
-                    <div className="flex">
+                    <div className="flex grow">
                         <ControlButton
                             icon = {1}
                         />
@@ -56,7 +62,13 @@ export const MessageCard = ({
                         />
                     </div>
                 </div>
-                <Counter/>
+                    {
+                        file &&
+                        <PreviewFile
+                            ext={getExtantion(file.name)}
+                            onClick={onShow}
+                        />
+                    }
             </header>
             <div className="py-2 pl-5 pr-1">
               {children}

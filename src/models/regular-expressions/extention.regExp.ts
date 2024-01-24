@@ -1,0 +1,1 @@
+export const extRegExp = new RegExp('[.][a-z]{3,4}$', 'g')

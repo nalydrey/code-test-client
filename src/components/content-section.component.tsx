@@ -4,9 +4,6 @@ interface ContentSectionProps {
     text: string
 }
 
-const styles: CSSStyleDeclaration = {
-    background: 'black'
-}
 
 export const ContentSection = ({
     text
