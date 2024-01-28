@@ -8,4 +8,5 @@ export interface Comment {
     text: string
     parent: Comment | null
     reply: Comment[]
+    createdDate: Date
 }

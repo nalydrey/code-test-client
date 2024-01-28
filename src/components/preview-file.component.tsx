@@ -31,7 +31,7 @@ export const PreviewFile = ({
     }, [ext])
 
     return (
-        <div className={`flex items-center ${className}`}>
+        <div className={`flex items-center justify-center ${className}`}>
             {
                 isDocument &&
                 <button 

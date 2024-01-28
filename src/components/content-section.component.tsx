@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+import { toHTML } from "../functions/toHTML"
 
 interface ContentSectionProps {
     text: string
@@ -13,25 +14,7 @@ export const ContentSection = ({
  
 
     useEffect(()=>{
-        console.log(div);
-        if(div.current){
-            div.current.innerHTML = text
-            const code = div.current.querySelectorAll('code')
-            code.forEach(elem => {
-                const {style} = elem
-                style.background = '#27294a'
-                style.borderRadius = '8px'
-                style.padding = '10px'
-                style.color = '#11e00acc'
-            })
-            const a = div.current.querySelectorAll('a')
-            a.forEach(elem => {
-                const {style} = elem
-                style.textDecoration = 'underline' 
-                style.fontWeight = '500'
-                style.color = 'blue'
-            })
-        }
+        toHTML(div, text)
     }, [text])
 
 

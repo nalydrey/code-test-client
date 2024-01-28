@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { Reply } from "./components/reply.component"
 import { ModalWindow } from "./components/modal-window.compnent"
 import { CommentForm } from "./components/comment-form.component"
-import defaultAvatar from './assets/avatars/avatar_13.png'
+
 import { avatars } from "./data/avatars.data"
 import { useDownload } from "./api/useDownload"
 import { ICommentForm } from "./data/init-comment-form.data"

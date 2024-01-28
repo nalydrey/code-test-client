@@ -47,7 +47,7 @@ export const TagButtons = ({
           type='button'
           className='w-6 p-1 '
           icon = {<LinkIcon/>}
-          onClick={(e) => onAddTag(e, '<a href=”” title=””></a>')}
+          onClick={(e) => onAddTag(e, "<a href='' title=''></a>")}
         />
         <ControlButton
           type='button'

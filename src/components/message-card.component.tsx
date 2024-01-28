@@ -1,13 +1,12 @@
-import { ReactNode } from "react"
+import { MouseEvent, ReactNode } from "react"
 import { Avatar } from "./avatar.component"
 import moment from 'moment'
 import 'moment/locale/ru'
 import { ControlButton } from "./control-button.component"
-import { TrashIcon } from "@heroicons/react/16/solid"
-import { MouseEvent } from "react"
 import { PreviewFile } from "./preview-file.component"
 import { getExtantion } from "../functions/get-extention"
 import { IFile } from "../models/file.model"
+import { DeleteForeverOutlined, ReplyOutlined } from "@mui/icons-material"
 
 
 interface MessageCardProps {
@@ -17,6 +16,7 @@ interface MessageCardProps {
     children: JSX.Element | JSX.Element[] | ReactNode | ReactNode[]
     onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
     onShow?: (e: MouseEvent<HTMLButtonElement>) => void
+    onReply?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
 export const MessageCard = ({
@@ -25,10 +25,11 @@ export const MessageCard = ({
     userName,
     children,
     onDelete,
-    onShow
+    onShow,
+    onReply
 }: MessageCardProps) => {
 
-   
+    
    
     
 
@@ -53,12 +54,13 @@ export const MessageCard = ({
                             icon = {2}
                         />
                         <ControlButton
-                            icon = {3}
+                            icon = {<ReplyOutlined/>}
+                            onClick={onReply}
                         />
                         <ControlButton
                             onClick={onDelete}
                             className="hover:text-red-500"
-                            icon = {<TrashIcon/>}
+                            icon = {<DeleteForeverOutlined/>}
                         />
                     </div>
                 </div>

@@ -5,6 +5,10 @@ import { FileResponce } from '../models/server-responce/file-responce.model'
 import { IUpdateFile } from '../models/dto/update-file.dto'
 import { allowedDocumenst, allowedPictures } from '../data/allowed-extantions.data'
 import { getExtantion } from '../functions/get-extention'
+import { CommentResponce } from '../models/server-responce/comment-responce'
+import { ReplyDto } from '../models/dto/reply-dto'
+import { queryString } from 'object-query-string'
+import { Sort } from '../components/table-head.component'
 
 export const apiSlice = createApi({
     reducerPath: 'api',
@@ -12,8 +16,16 @@ export const apiSlice = createApi({
     tagTypes: ['Comments'],
     endpoints: builder => (
     {
-      getComments: builder.query<CommentsResp, string>({
-        query: () => '/comments',
+      getComments: builder.query<CommentsResp, {sort?: Sort, page: number}>({
+        query: (q) => {
+          const query = queryString({
+            sort: {...q.sort},
+            page: q.page
+          })
+          console.log(query);
+          
+          return `/comments?${query}`
+        },
         providesTags: ['Comments']
       }),
       deleteComment: builder.mutation({
@@ -23,10 +35,18 @@ export const apiSlice = createApi({
         }),
         invalidatesTags: ['Comments']
       }),
-      createNewComment: builder.mutation({
+      createNewComment: builder.mutation<CommentResponce, NewCommentDto>({
         invalidatesTags: ['Comments'],
-        query: (body: NewCommentDto) => ({
+        query: (body) => ({
           url: '/comments',
+          method: 'POST',
+          body
+        })
+      }),
+      createCommentReply: builder.mutation<CommentResponce, ReplyDto>({
+        invalidatesTags: ['Comments'],
+        query: ({body, id}) => ({
+          url: `/comments/${id}`,
           method: 'POST',
           body
         })
@@ -48,6 +68,7 @@ export const apiSlice = createApi({
           }
         },
       }),
+      
 
       createOrUpdateFile: builder.mutation<FileResponce, IUpdateFile>({
         query: ({fileId, body, fileExt}) => {
@@ -69,6 +90,7 @@ export const apiSlice = createApi({
     useDeleteCommentMutation,
     useCreateNewCommentMutation,
     useCreateOrUpdateFileMutation,
-    useCreateFileMutation
+    useCreateFileMutation,
+    useCreateCommentReplyMutation
     
   } = apiSlice

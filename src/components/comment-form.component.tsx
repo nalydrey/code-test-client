@@ -172,6 +172,8 @@ export const CommentForm = ({
                             className=' flex justify-center'
                             sitekey={import.meta.env.VITE_PUCLIC_KEY}
                             onChange={handleRecaptchaChange}
+                            onLoad={()=>{console.log('loaded');
+                            }}
                         />
                     </div>
                  
